@@ -22,6 +22,14 @@ public class CurrencyConverter : ICurrencyConverter
 
     public double Convert(string fromCurrency, string toCurrency, double amount)
     {
-        return 10.1;
+        var shortestPath = Graph.ShortestPath(fromCurrency, toCurrency);
+
+        var result = amount;
+        for (var i = 0; i < shortestPath.Count - 1; i++)
+        {
+            var edge = Graph.AdjacencyList[shortestPath[i]].First(edge => edge.Destination == shortestPath[i+1]);
+            result *= edge.Amount;
+        }
+        return result;
     }
 }
